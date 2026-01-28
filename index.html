@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melodie Shop | Brawl Pass</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --melodie-pink: #ff69b4;
+            --melodie-pink-dark: #ff1493;
+            --melodie-purple: #9370db;
+            --melodie-purple-dark: #7b68ee;
+            --melodie-blue: #4169e1;
+            --melodie-dark: #1a1a2e;
+            --melodie-light: #f8f4ff;
+            --melodie-gold: #ffd700;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 50%, #1a1a2e 100%);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--melodie-pink);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--melodie-pink);
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, var(--melodie-pink), var(--melodie-purple), var(--melodie-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--melodie-pink), var(--melodie-purple));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.3);
+        }
+
+        /* Products Grid - ВЫРОВНЯНО */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 3rem 0 5rem;
+            align-items: stretch;
+        }
+
+        @media (max-width: 992px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .product-card {
+            background: linear-gradient(145deg, rgba(26, 26, 46, 0.9), rgba(43, 27, 105, 0.9));
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--melodie-pink);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-card.highlighted {
+            border: 3px solid var(--melodie-gold);
+            transform: scale(1.02);
+        }
+
+        .product-header {
+            padding: 2rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            flex-grow: 1;
+        }
+
+        .product-icon {
+            font-size: 3rem;
+            color: var(--melodie-pink);
+            margin-bottom: 1rem;
+        }
+
+        .product-title {
+            font-size: 1.8rem;
+            color: var(--melodie-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 2.5rem;
+            color: white;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .product-features {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .product-features ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-features li {
+            padding: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* How it works - ДОБАВЛЕНО */
+        .how-it-works {
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.03);
+            margin: 3rem 0;
+            border-radius: 20px;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 992px) {
+            .steps-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 105, 180, 0.2);
+            transition: var(--transition);
+        }
+
+        .step:hover {
+            border-color: var(--melodie-pink);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--melodie-pink), var(--melodie-purple));
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        /* Testimonials - ДОБАВЛЕНО */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        @media (max-width: 992px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 105, 180, 0.2);
+            transition: var(--transition);
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--melodie-pink);
+            transform: translateY(-5px);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--melodie-pink), var(--melodie-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Admin Dashboard - ДОБАВЛЕНО */
+        .dashboard {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(90deg, var(--melodie-purple), var(--melodie-pink));
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 992px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(255, 105, 180, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--melodie-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .orders-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            background: rgba(255, 105, 180, 0.2);
+            padding: 1rem;
+            font-weight: bold;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn {
+            padding: 0.3rem 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 0.2rem;
+            transition: var(--transition);
+        }
+
+        .btn-complete {
+            background: #00b894;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(26, 26, 46, 0.95), rgba(43, 27, 105, 0.95));
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid var(--melodie-pink);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--melodie-pink), var(--melodie-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        /* User Panel */
+        .user-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100%;
+            background: rgba(26, 26, 46, 0.98);
+            z-index: 1500;
+            transition: var(--transition);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+            border-left: 2px solid var(--melodie-pink);
+            overflow-y: auto;
+        }
+
+        .user-panel.active {
+            right: 0;
+        }
+
+        .close-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <h3 style="text-align: center; margin-bottom: 2rem; color: var(--melodie-gold);">Вход в систему</h3>
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                <button class="btn" style="flex: 1;" onclick="showLogin()">Вход</button>
+                <button class="btn" style="flex: 1;" onclick="showRegister()">Регистрация</button>
+            </div>
+            
+            <div id="loginForm">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Email</label>
+                    <input type="email" id="loginEmail" placeholder="ваш@email.com" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="Ваш пароль" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Роль</label>
+                    <select id="loginRole" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                        <option value="client">Клиент</option>
+                        <option value="manager">Менеджер</option>
+                        <option value="admin">Администратор</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="login()" style="width: 100%;">Войти</button>
+            </div>
+            
+            <div id="registerForm" style="display: none;">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Имя</label>
+                    <input type="text" id="registerName" placeholder="Ваше имя" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Email</label>
+                    <input type="email" id="registerEmail" placeholder="ваш@email.com" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Пароль</label>
+                    <input type="password" id="registerPassword" placeholder="Не менее 6 символов" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Подтвердите пароль</label>
+                    <input type="password" id="registerConfirm" placeholder="Повторите пароль" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                </div>
+                <button class="btn" onclick="register()" style="width: 100%;">Зарегистрироваться</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Panel -->
+    <div class="user-panel" id="userPanel">
+        <button class="close-panel" onclick="closeUserPanel()">&times;</button>
+        <div style="padding: 2rem;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(45deg, var(--melodie-pink), var(--melodie-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;" id="userAvatar">
+                    ?
+                </div>
+                <div>
+                    <h3 id="userName">Гость</h3>
+                    <p id="userRole" style="color: rgba(255, 255, 255, 0.7);">Не авторизован</p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 2rem;">
+                <h4 style="color: var(--melodie-gold); margin-bottom: 1rem;">Мои заказы</h4>
+                <div id="userOrders">
+                    <!-- Заказы будут загружаться динамически -->
+                </div>
+            </div>
+            
+            <button class="btn" onclick="logout()" style="width: 100%;">Выйти</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h2>Панель управления</h2>
+                    <p id="dashboardRole">Администратор</p>
+                </div>
+                <button class="btn" onclick="backToShop()">Вернуться в магазин</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalOrders">0</div>
+                    <div>Всего заказов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalRevenue">0 ₽</div>
+                    <div>Общая выручка</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pendingOrders">0</div>
+                    <div>В обработке</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedOrders">0</div>
+                    <div>Выполнено</div>
+                </div>
+            </div>
+            
+            <h3 class="section-title">Управление заказами</h3>
+            
+            <div style="margin-bottom: 1rem; display: flex; gap: 1rem;">
+                <input type="text" id="searchOrders" placeholder="Поиск заказов..." style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                <button class="btn" onclick="filterOrders('all')">Все</button>
+                <button class="btn" onclick="filterOrders('pending')">В обработке</button>
+                <button class="btn" onclick="filterOrders('completed')">Выполненные</button>
+            </div>
+            
+            <div class="orders-table">
+                <div class="table-header">
+                    <div>ID</div>
+                    <div>Пользователь</div>
+                    <div>Продукт</div>
+                    <div>Цена</div>
+                    <div>Статус</div>
+                    <div>Действия</div>
+                </div>
+                <div id="ordersList">
+                    <!-- Заказы будут загружаться динамически -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h1>Melodie Shop</h1>
+                </div>
+                
+                <div class="nav-right">
+                    <button class="btn" onclick="openAuthModal()">Войти</button>
+                    <button class="btn" onclick="openUserPanel()">
+                        <i class="fas fa-user"></i>
+                        <span id="orderBadge" style="display: none; background: red; color: white; padding: 0.2rem 0.5rem; border-radius: 50%; margin-left: 0.5rem;">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        <!-- Hero -->
+        <section style="padding: 4rem 0; text-align: center;">
+            <div class="container">
+                <h2 style="font-size: 3rem; margin-bottom: 1rem; color: var(--melodie-pink);">Королевский Brawl Pass</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Получите эксклюзивный доступ к лучшим пропускам по специальным ценам! Мгновенная доставка и гарантия качества.
+                </p>
+                <button class="btn" onclick="scrollToProducts()">Купить сейчас</button>
+            </div>
+        </section>
+
+        <!-- Products -->
+        <section id="products" style="padding: 2rem 0;">
+            <div class="container">
+                <h2 class="section-title">Выберите свой пропуск</h2>
+                
+                <div class="products-grid">
+                    <!-- Brawl Pass -->
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3 class="product-title">Brawl Pass</h3>
+                            <div class="product-price">699 ₽</div>
+                            <p>Стандартный пропуск на сезон</p>
+                        </div>
+                        <div class="product-features">
+                            <ul>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Уникальные скины</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Монеты и гемы</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Бустеры прогресса</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Эксклюзивные награды</li>
+                            </ul>
+                            <button class="btn" onclick="buyProduct('Brawl Pass', 699)" style="width: 100%;">Купить</button>
+                        </div>
+                    </div>
+
+                    <!-- Brawl Pass+ -->
+                    <div class="product-card highlighted">
+                        <div class="product-header">
+                            <div class="product-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3 class="product-title">Brawl Pass+</h3>
+                            <div class="product-price">1 499 ₽</div>
+                            <p>Премиум пропуск с бонусами</p>
+                        </div>
+                        <div class="product-features">
+                            <ul>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Все из Brawl Pass</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> +12 уровней сразу</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Дополнительные награды</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Ускоренный прогресс</li>
+                            </ul>
+                            <button class="btn" onclick="buyProduct('Brawl Pass+', 1499)" style="width: 100%; background: linear-gradient(45deg, var(--melodie-gold), #ffaa00); color: black;">Купить сейчас</button>
+                        </div>
+                    </div>
+
+                    <!-- 2 Seasons -->
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-icon">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                            <h3 class="product-title">2 сезона</h3>
+                            <div class="product-price">1 120 ₽</div>
+                            <p>Специальное предложение</p>
+                        </div>
+                        <div class="product-features">
+                            <ul>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> 2 Brawl Pass+</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Экономия 20%</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Приоритетная поддержка</li>
+                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Бонусные награды</li>
+                            </ul>
+                            <button class="btn" onclick="buyProduct('2 сезона', 1120)" style="width: 100%;">Купить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it works -->
+        <section class="how-it-works">
+            <div class="container">
+                <h2 class="section-title">Как это работает</h2>
+                <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem;">
+                    Простой и быстрый процесс покупки в 4 шага
+                </p>
+                
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3 style="color: var(--melodie-pink); margin-bottom: 0.5rem;">Выбор пропуска</h3>
+                        <p>Выберите подходящий Brawl Pass и нажмите "Купить"</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3 style="color: var(--melodie-pink); margin-bottom: 0.5rem;">Оплата</h3>
+                        <p>Оплатите заказ удобным способом</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3 style="color: var(--melodie-pink); margin-bottom: 0.5rem;">Активация</h3>
+                        <p>Отправьте данные аккаунта менеджеру</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3 style="color: var(--melodie-pink); margin-bottom: 0.5rem;">Готово</h3>
+                        <p>Наслаждайтесь новыми возможностями в игре</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section style="padding: 4rem 0;">
+            <div class="container">
+                <h2 class="section-title">Отзывы игроков</h2>
+                <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem;">
+                    Что говорят наши клиенты
+                </p>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">АЧ</div>
+                            <div>
+                                <h4 style="color: var(--melodie-gold);">Алексей Ч.</h4>
+                                <p style="color: rgba(255, 255, 255, 0.7);">67к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"Покупаю уже третий сезон подряд. Всегда быстрая доставка и отличная поддержка!"</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">МС</div>
+                            <div>
+                                <h4 style="color: var(--melodie-gold);">Мария С.</h4>
+                                <p style="color: rgba(255, 255, 255, 0.7);">45к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"Лучший магазин Brawl Pass! Цены адекватные, всё работает моментально."</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">РР</div>
+                            <div>
+                                <h4 style="color: var(--melodie-gold);">Руслан Р.</h4>
+                                <p style="color: rgba(255, 255, 255, 0.7);">100к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"Пользуюсь больше года. Никогда не было проблем. Рекомендую всем!"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="padding: 3rem 0; background: rgba(0, 0, 0, 0.3); margin-top: 4rem;">
+        <div class="container">
+            <div style="text-align: center;">
+                <h3 style="color: var(--melodie-gold); margin-bottom: 1rem;">Melodie Shop</h3>
+                <p style="margin-bottom: 2rem; color: rgba(255, 255, 255, 0.7);">
+                    Официальный магазин Brawl Pass. Все права защищены.<br>
+                    Brawl Stars является торговой маркой Supercell.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 1rem;">
+                    <button class="btn" onclick="openAuthModal()">Вход для персонала</button>
+                    <button class="btn" onclick="openUserPanel()">Мой аккаунт</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Данные приложения
+        let users = [
+            { id: 1, name: "Администратор", email: "admin@test.com", password: "admin123", role: "admin", avatar: "A" },
+            { id: 2, name: "Менеджер", email: "manager@test.com", password: "manager123", role: "manager", avatar: "M" },
+            { id: 3, name: "Иван Иванов", email: "client@test.com", password: "client123", role: "client", avatar: "И" }
+        ];
+
+        let orders = [
+            { id: 1, userId: 3, userName: "Иван Иванов", product: "Brawl Pass+", price: 1499, date: "15.10.2023", status: "completed" },
+            { id: 2, userId: 3, userName: "Руслан Р", product: "Brawl Pass", price: 699, date: "18.10.2023", status: "pending" },
+            { id: 3, userId: 2, userName: "Менеджер", product: "2 сезона", price: 1120, date: "20.10.2023", status: "completed" }
+        ];
+
+        let currentUser = null;
+        let currentFilter = 'all';
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUser();
+            updateUI();
+            updateDashboard();
+        });
+
+        // Функции авторизации
+        function openAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+            showLogin();
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const role = document.getElementById('loginRole').value;
+            
+            const user = users.find(u => 
+                u.email === email && 
+                u.password === password && 
+                u.role === role
+            );
+            
+            if (user) {
+                currentUser = user;
+                saveUser();
+                closeAuthModal();
+                updateUI();
+                updateDashboard();
+                
+                if (user.role === 'admin' || user.role === 'manager') {
+                    showDashboard();
+                }
+                
+                showNotification('Успешный вход!', 'success');
+            } else {
+                showNotification('Неверные данные', 'error');
+            }
+        }
+
+        function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirm').value;
+            
+            if (!name || !email || !password) {
+                showNotification('Заполните все поля', 'error');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showNotification('Пароли не совпадают', 'error');
+                return;
+            }
+            
+            if (users.some(u => u.email === email)) {
+                showNotification('Пользователь уже существует', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: users.length + 1,
+                name: name,
+                email: email,
+                password: password,
+                role: 'client',
+                avatar: name.charAt(0).toUpperCase()
+            };
+            
+            users.push(newUser);
+            currentUser = newUser;
+            saveUser();
+            closeAuthModal();
+            updateUI();
+            showNotification('Регистрация успешна!', 'success');
+        }
+
+        function logout() {
+            currentUser = null;
+            saveUser();
+            closeUserPanel();
+            updateUI();
+            showNotification('Вы вышли из системы', 'info');
+        }
+
+        // Функции UI
+        function updateUI() {
+            const userName = document.getElementById('userName');
+            const userRole = document.getElementById('userRole');
+            const userAvatar = document.getElementById('userAvatar');
+            const orderBadge = document.getElementById('orderBadge');
+            
+            if (currentUser) {
+                userName.textContent = currentUser.name;
+                userRole.textContent = currentUser.role === 'admin' ? 'Администратор' : 
+                                      currentUser.role === 'manager' ? 'Менеджер' : 'Клиент';
+                userAvatar.textContent = currentUser.avatar;
+                
+                // Обновляем заказы пользователя
+                const userOrders = orders.filter(o => o.userId === currentUser.id);
+                const pendingOrders = userOrders.filter(o => o.status === 'pending').length;
+                
+                if (pendingOrders > 0) {
+                    orderBadge.textContent = pendingOrders;
+                    orderBadge.style.display = 'inline';
+                } else {
+                    orderBadge.style.display = 'none';
+                }
+                
+                // Обновляем список заказов в панели пользователя
+                updateUserOrders();
+            } else {
+                userName.textContent = 'Гость';
+                userRole.textContent = 'Не авторизован';
+                userAvatar.textContent = '?';
+                orderBadge.style.display = 'none';
+            }
+        }
+
+        function updateUserOrders() {
+            const userOrdersContainer = document.getElementById('userOrders');
+            if (!currentUser) {
+                userOrdersContainer.innerHTML = '<p>Войдите в систему, чтобы увидеть заказы</p>';
+                return;
+            }
+            
+            const userOrders = orders.filter(o => o.userId === currentUser.id);
+            
+            if (userOrders.length === 0) {
+                userOrdersContainer.innerHTML = '<p>У вас пока нет заказов</p>';
+                return;
+            }
+            
+            let html = '';
+            userOrders.forEach(order => {
+                let statusClass = '';
+                let statusText = '';
+                
+                switch(order.status) {
+                    case 'completed':
+                        statusClass = 'status-completed';
+                        statusText = 'Выполнен';
+                        break;
+                    case 'pending':
+                        statusClass = 'status-pending';
+                        statusText = 'В обработке';
+                        break;
+                    case 'cancelled':
+                        statusClass = 'status-cancelled';
+                        statusText = 'Отменен';
+                        break;
+                }
+                
+                html += `
+                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <strong>${order.product}</strong>
+                            <span style="background: ${order.status === 'completed' ? '#00b894' : order.status === 'pending' ? '#ff9500' : '#ff6b6b'}; 
+                                  color: white; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">
+                                ${statusText}
+                            </span>
+                        </div>
+                        <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                            <div>Дата: ${order.date}</div>
+                            <div>Цена: ${order.price} ₽</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            userOrdersContainer.innerHTML = html;
+        }
+
+        // Функции покупки
+        function buyProduct(product, price) {
+            if (!currentUser) {
+                openAuthModal();
+                showNotification('Пожалуйста, войдите в систему', 'warning');
+                return;
+            }
+            
+            const newOrder = {
+                id: orders.length + 1,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                product: product,
+                price: price,
+                date: new Date().toLocaleDateString('ru-RU'),
+                status: 'pending'
+            };
+            
+            orders.push(newOrder);
+            updateUI();
+            updateDashboard();
+            
+            showNotification(`Заказ "${product}" оформлен!`, 'success');
+            
+            // Если пользователь менеджер или админ, показываем панель управления
+            if (currentUser.role === 'admin' || currentUser.role === 'manager') {
+                showDashboard();
+            }
+        }
+
+        // Панель управления
+        function showDashboard() {
+            document.getElementById('dashboard').classList.add('active');
+            document.getElementById('mainContent').style.display = 'none';
+            updateDashboard();
+        }
+
+        function backToShop() {
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('mainContent').style.display = 'block';
+        }
+
+        function updateDashboard() {
+            if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'manager')) {
+                return;
+            }
+            
+            // Статистика
+            const totalOrders = orders.length;
+            const totalRevenue = orders.reduce((sum, order) => sum + order.price, 0);
+            const pendingOrders = orders.filter(o => o.status === 'pending').length;
+            const completedOrders = orders.filter(o => o.status === 'completed').length;
+            
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('totalRevenue').textContent = totalRevenue + ' ₽';
+            document.getElementById('pendingOrders').textContent = pendingOrders;
+            document.getElementById('completedOrders').textContent = completedOrders;
+            
+            // Список заказов
+            updateOrdersList();
+        }
+
+        function updateOrdersList(filter = currentFilter, search = '') {
+            const ordersList = document.getElementById('ordersList');
+            let filteredOrders = orders;
+            
+            if (filter !== 'all') {
+                filteredOrders = orders.filter(o => o.status === filter);
+            }
+            
+            if (search) {
+                filteredOrders = filteredOrders.filter(o => 
+                    o.userName.toLowerCase().includes(search.toLowerCase()) ||
+                    o.product.toLowerCase().includes(search.toLowerCase())
+                );
+            }
+            
+            if (filteredOrders.length === 0) {
+                ordersList.innerHTML = '<div class="table-row" style="text-align: center; padding: 2rem;">Заказы не найдены</div>';
+                return;
+            }
+            
+            let html = '';
+            filteredOrders.forEach(order => {
+                let statusColor = '';
+                let statusText = '';
+                
+                switch(order.status) {
+                    case 'completed':
+                        statusColor = '#00b894';
+                        statusText = 'Выполнен';
+                        break;
+                    case 'pending':
+                        statusColor = '#ff9500';
+                        statusText = 'В обработке';
+                        break;
+                    case 'cancelled':
+                        statusColor = '#ff6b6b';
+                        statusText = 'Отменен';
+                        break;
+                }
+                
+                html += `
+                    <div class="table-row">
+                        <div>#${order.id}</div>
+                        <div>${order.userName}</div>
+                        <div>${order.product}</div>
+                        <div>${order.price} ₽</div>
+                        <div>
+                            <span style="background: ${statusColor}; color: white; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">
+                                ${statusText}
+                            </span>
+                        </div>
+                        <div>
+                            ${order.status === 'pending' ? `
+                                <button class="action-btn btn-complete" onclick="completeOrder(${order.id})">✓</button>
+                                <button class="action-btn btn-cancel" onclick="cancelOrder(${order.id})">✕</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            ordersList.innerHTML = html;
+        }
+
+        function filterOrders(status) {
+            currentFilter = status;
+            const search = document.getElementById('searchOrders').value;
+            updateOrdersList(status, search);
+        }
+
+        function completeOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                order.status = 'completed';
+                updateUI();
+                updateDashboard();
+                showNotification('Заказ выполнен', 'success');
+            }
+        }
+
+        function cancelOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                order.status = 'cancelled';
+                updateUI();
+                updateDashboard();
+                showNotification('Заказ отменен', 'info');
+            }
+        }
+
+        // Панель пользователя
+        function openUserPanel() {
+            document.getElementById('userPanel').classList.add('active');
+            updateUserOrders();
+        }
+
+        function closeUserPanel() {
+            document.getElementById('userPanel').classList.remove('active');
+        }
+
+        // Вспомогательные функции
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                color: white;
+                font-weight: bold;
+                z-index: 3000;
+                animation: slideIn 0.3s ease;
+                background: ${type === 'success' ? '#00b894' : type === 'error' ? '#ff6b6b' : type === 'warning' ? '#ff9500' : '#4169e1'};
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function saveUser() {
+            if (currentUser) {
+                localStorage.setItem('melodieShopUser', JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem('melodieShopUser');
+            }
+        }
+
+        function loadUser() {
+            const saved = localStorage.getItem('melodieShopUser');
+            if (saved) {
+                try {
+                    currentUser = JSON.parse(saved);
+                } catch (e) {
+                    currentUser = null;
+                }
+            }
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Закрытие модальных окон при клике вне
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                closeAuthModal();
+            }
+        });
+
+        // Поиск заказов
+        document.getElementById('searchOrders')?.addEventListener('input', function(e) {
+            updateOrdersList(currentFilter, e.target.value);
+        });
+
+        // Добавляем стили для анимации
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
