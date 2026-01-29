@@ -1,3 +1,2 @@
 # MelodieShop1.github.io
 MelodieShop
-https://img-webcalypt.ru/storage/memes/178367/20254/9lMTjwZokG6bj6S6F2DkW1JxgQf0MMvNasqbwryKM4I9Gp3AYRd0RyhPeiykotyvnerTAFMLx0oRktHXQl4a8K90zJaJUuCbipPtNGCf1zVmpPfzqkMMeAJDbfjTZVfY.jpeg
