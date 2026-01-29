@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Auth Modal -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <h3 style="text-align: center; margin-bottom: 2rem; color: var(--melodie-gold);">Вход в систему</h3>
@@ -57,7 +56,6 @@
         </div>
     </div>
 
-    <!-- User Panel -->
     <div class="user-panel" id="userPanel">
         <button class="close-panel" onclick="closeUserPanel()">&times;</button>
         <div style="padding: 2rem;">
@@ -74,7 +72,6 @@
             <div style="margin-bottom: 2rem;">
                 <h4 style="color: var(--melodie-gold); margin-bottom: 1rem;">Мои заказы</h4>
                 <div id="userOrders">
-                    <!-- Заказы будут загружаться динамически -->
                 </div>
             </div>
             
@@ -82,7 +79,6 @@
         </div>
     </div>
 
-    <!-- Admin Dashboard -->
     <div class="dashboard" id="dashboard">
         <div class="container">
             <div class="dashboard-header">
@@ -131,13 +127,11 @@
                     <div>Действия</div>
                 </div>
                 <div id="ordersList">
-                    <!-- Заказы будут загружаться динамически -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Header -->
     <header>
         <div class="container">
             <div class="header-content">
@@ -159,9 +153,7 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main id="mainContent">
-        <!-- Hero -->
         <section style="padding: 4rem 0; text-align: center;">
             <div class="container">
                 <h2 style="font-size: 3rem; margin-bottom: 1rem; color: var(--melodie-pink);">Королевский Brawl Pass</h2>
@@ -172,13 +164,11 @@
             </div>
         </section>
 
-        <!-- Products -->
         <section id="products" style="padding: 2rem 0;">
             <div class="container">
                 <h2 class="section-title">Выберите свой пропуск</h2>
                 
                 <div class="products-grid">
-                    <!-- Brawl Pass -->
                     <div class="product-card">
                         <div class="product-header">
                             <div class="product-icon">
@@ -220,7 +210,6 @@
                         </div>
                     </div>
 
-                    <!-- 2 Seasons -->
                     <div class="product-card">
                         <div class="product-header">
                             <div class="product-icon">
@@ -244,7 +233,6 @@
             </div>
         </section>
 
-        <!-- How it works -->
         <section class="how-it-works">
             <div class="container">
                 <h2 class="section-title">Как это работает</h2>
@@ -280,7 +268,6 @@
             </div>
         </section>
 
-        <!-- Testimonials -->
         <section style="padding: 4rem 0;">
             <div class="container">
                 <h2 class="section-title">Отзывы игроков</h2>
@@ -337,7 +324,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer style="padding: 3rem 0; background: rgba(0, 0, 0, 0.3); margin-top: 4rem;">
         <div class="container">
             <div style="text-align: center;">
@@ -355,7 +341,6 @@
     </footer>
 
     <script>
-        // Данные приложения
         let users = [
             { id: 1, name: "Администратор", email: "admin@test.com", password: "admin123", role: "admin", avatar: "A" },
             { id: 2, name: "Менеджер", email: "manager@test.com", password: "manager123", role: "manager", avatar: "M" },
@@ -371,14 +356,12 @@
         let currentUser = null;
         let currentFilter = 'all';
 
-        // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
             loadUser();
             updateUI();
             updateDashboard();
         });
 
-        // Функции авторизации
         function openAuthModal() {
             document.getElementById('authModal').classList.add('active');
             showLogin();
@@ -472,7 +455,6 @@
             showNotification('Вы вышли из системы', 'info');
         }
 
-        // Функции UI
         function updateUI() {
             const userName = document.getElementById('userName');
             const userRole = document.getElementById('userRole');
@@ -485,7 +467,6 @@
                                       currentUser.role === 'manager' ? 'Менеджер' : 'Клиент';
                 userAvatar.textContent = currentUser.avatar;
                 
-                // Обновляем заказы пользователя
                 const userOrders = orders.filter(o => o.userId === currentUser.id);
                 const pendingOrders = userOrders.filter(o => o.status === 'pending').length;
                 
@@ -496,7 +477,6 @@
                     orderBadge.style.display = 'none';
                 }
                 
-                // Обновляем список заказов в панели пользователя
                 updateUserOrders();
             } else {
                 userName.textContent = 'Гость';
@@ -560,7 +540,6 @@
             userOrdersContainer.innerHTML = html;
         }
 
-        // Функции покупки
         function buyProduct(product, price) {
             if (!currentUser) {
                 openAuthModal();
@@ -584,13 +563,11 @@
             
             showNotification(`Заказ "${product}" оформлен!`, 'success');
             
-            // Если пользователь менеджер или админ, показываем панель управления
             if (currentUser.role === 'admin' || currentUser.role === 'manager') {
                 showDashboard();
             }
         }
 
-        // Панель управления
         function showDashboard() {
             document.getElementById('dashboard').classList.add('active');
             document.getElementById('mainContent').style.display = 'none';
@@ -607,7 +584,6 @@
                 return;
             }
             
-            // Статистика
             const totalOrders = orders.length;
             const totalRevenue = orders.reduce((sum, order) => sum + order.price, 0);
             const pendingOrders = orders.filter(o => o.status === 'pending').length;
@@ -618,7 +594,6 @@
             document.getElementById('pendingOrders').textContent = pendingOrders;
             document.getElementById('completedOrders').textContent = completedOrders;
             
-            // Список заказов
             updateOrdersList();
         }
 
@@ -712,7 +687,6 @@
             }
         }
 
-        // Панель пользователя
         function openUserPanel() {
             document.getElementById('userPanel').classList.add('active');
             updateUserOrders();
@@ -722,7 +696,6 @@
             document.getElementById('userPanel').classList.remove('active');
         }
 
-        // Вспомогательные функции
         function showNotification(message, type) {
             const notification = document.createElement('div');
             notification.style.cssText = `
@@ -769,19 +742,16 @@
             document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Закрытие модальных окон при клике вне
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modal')) {
                 closeAuthModal();
             }
         });
 
-        // Поиск заказов
         document.getElementById('searchOrders')?.addEventListener('input', function(e) {
             updateOrdersList(currentFilter, e.target.value);
         });
 
-        // Добавляем стили для анимации
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideIn {
