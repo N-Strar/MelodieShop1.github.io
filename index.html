@@ -1,89 +1,123 @@
-<head>
-    <link rel="icon" href="https://i.pinimg.com/736x/6f/ce/1e/6fce1eda87923a7d025ded5c34ed1bbc.jpg">
-</head>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Melodie Shop | Brawl Pass</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon>
-    <link rel="stylesheet" href="">
+    <link rel="icon" href="https://i.pinimg.com/736x/6f/ce/1e/6fce1eda87923a7d025ded5c34ed1bbc.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chat.css">
 </head>
 <body>
+    <!-- Чат поддержки -->
+    <div class="chat-container">
+        <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-headset"></i>
+                    <span>Поддержка</span>
+                    <div class="support-status" id="supportStatus">
+                        <i class="fas fa-circle"></i>
+                        <span>Онлайн</span>
+                    </div>
+                </div>
+                <button class="chat-close" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="no-messages" id="noMessages">
+                    Напишите свой вопрос, и мы ответим вам в ближайшее время!
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Введите ваше сообщение..." onkeypress="handleChatInput(event)">
+                <button class="chat-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно авторизации -->
     <div class="modal" id="authModal">
         <div class="modal-content">
-            <h3 style="text-align: center; margin-bottom: 2rem; color: var(--melodie-gold);">Вход в систему</h3>
-            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
-                <button class="btn" style="flex: 1;" onclick="showLogin()">Вход</button>
-                <button class="btn" style="flex: 1;" onclick="showRegister()">Регистрация</button>
+            <h3 class="text-gradient">Вход в систему</h3>
+            <div class="form-buttons">
+                <button class="btn" onclick="showLogin()">Вход</button>
+                <button class="btn" onclick="showRegister()">Регистрация</button>
             </div>
             
             <div id="loginForm">
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Email</label>
-                    <input type="email" id="loginEmail" placeholder="ваш@email.com" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="ваш@email.com">
                 </div>
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Пароль</label>
-                    <input type="password" id="loginPassword" placeholder="Ваш пароль" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Ваш пароль">
                 </div>
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Роль</label>
-                    <select id="loginRole" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                <div class="form-group">
+                    <label>Роль</label>
+                    <select id="loginRole" class="form-control">
                         <option value="client">Клиент</option>
                         <option value="manager">Менеджер</option>
                         <option value="admin">Администратор</option>
                     </select>
                 </div>
-                <button class="btn" onclick="login()" style="width: 100%;">Войти</button>
+                <button class="btn" onclick="login()">Войти</button>
             </div>
             
-            <div id="registerForm" style="display: none;">
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Имя</label>
-                    <input type="text" id="registerName" placeholder="Ваше имя" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+            <div id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label>Имя</label>
+                    <input type="text" id="registerName" class="form-control" placeholder="Ваше имя">
                 </div>
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Email</label>
-                    <input type="email" id="registerEmail" placeholder="ваш@email.com" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="ваш@email.com">
                 </div>
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Пароль</label>
-                    <input type="password" id="registerPassword" placeholder="Не менее 6 символов" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Не менее 6 символов">
                 </div>
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--melodie-pink);">Подтвердите пароль</label>
-                    <input type="password" id="registerConfirm" placeholder="Повторите пароль" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+                <div class="form-group">
+                    <label>Подтвердите пароль</label>
+                    <input type="password" id="registerConfirm" class="form-control" placeholder="Повторите пароль">
                 </div>
-                <button class="btn" onclick="register()" style="width: 100%;">Зарегистрироваться</button>
+                <button class="btn" onclick="register()">Зарегистрироваться</button>
             </div>
         </div>
     </div>
 
+    <!-- Панель пользователя -->
     <div class="user-panel" id="userPanel">
         <button class="close-panel" onclick="closeUserPanel()">&times;</button>
-        <div style="padding: 2rem;">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-                <div style="width: 60px; height: 60px; background: linear-gradient(45deg, var(--melodie-pink), var(--melodie-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;" id="userAvatar">
-                    ?
-                </div>
+        <div class="user-info">
+            <div class="user-header">
+                <div class="user-avatar" id="userAvatar">?</div>
                 <div>
                     <h3 id="userName">Гость</h3>
-                    <p id="userRole" style="color: rgba(255, 255, 255, 0.7);">Не авторизован</p>
+                    <p id="userRole" class="text-gold">Не авторизован</p>
                 </div>
             </div>
             
-            <div style="margin-bottom: 2rem;">
-                <h4 style="color: var(--melodie-gold); margin-bottom: 1rem;">Мои заказы</h4>
+            <div class="user-orders-list">
+                <h4>Мои заказы</h4>
                 <div id="userOrders">
+                    <p>Войдите в систему, чтобы увидеть заказы</p>
                 </div>
             </div>
             
-            <button class="btn" onclick="logout()" style="width: 100%;">Выйти</button>
+            <button class="btn" onclick="logout()">Выйти</button>
         </div>
     </div>
 
+    <!-- Панель администратора -->
     <div class="dashboard" id="dashboard">
         <div class="container">
             <div class="dashboard-header">
@@ -115,8 +149,8 @@
             
             <h3 class="section-title">Управление заказами</h3>
             
-            <div style="margin-bottom: 1rem; display: flex; gap: 1rem;">
-                <input type="text" id="searchOrders" placeholder="Поиск заказов..." style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 2px solid rgba(255, 105, 180, 0.3); background: rgba(255, 255, 255, 0.1); color: white;">
+            <div class="dashboard-controls">
+                <input type="text" id="searchOrders" class="form-control search-input" placeholder="Поиск заказов...">
                 <button class="btn" onclick="filterOrders('all')">Все</button>
                 <button class="btn" onclick="filterOrders('pending')">В обработке</button>
                 <button class="btn" onclick="filterOrders('completed')">Выполненные</button>
@@ -132,11 +166,13 @@
                     <div>Действия</div>
                 </div>
                 <div id="ordersList">
+                    <!-- Заказы будут здесь -->
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Шапка сайта -->
     <header>
         <div class="container">
             <div class="header-content">
@@ -151,25 +187,26 @@
                     <button class="btn" onclick="openAuthModal()">Войти</button>
                     <button class="btn" onclick="openUserPanel()">
                         <i class="fas fa-user"></i>
-                        <span id="orderBadge" style="display: none; background: red; color: white; padding: 0.2rem 0.5rem; border-radius: 50%; margin-left: 0.5rem;">0</span>
+                        <span id="orderBadge" class="status-badge status-pending hidden">0</span>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- Основное содержимое -->
     <main id="mainContent">
-        <section style="padding: 4rem 0; text-align: center;">
+        <section class="hero">
             <div class="container">
-                <h2 style="font-size: 3rem; margin-bottom: 1rem; color: var(--melodie-pink);">Brawl Pass</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-                    Получите доступ ропуску по специальным ценам! Мгновенная доставка и гарантия качества.
+                <h2>Brawl Pass</h2>
+                <p class="text-center">
+                    Получите доступ к пропуску по специальным ценам! Мгновенная доставка и гарантия качества.
                 </p>
                 <button class="btn" onclick="scrollToProducts()">Купить сейчас</button>
             </div>
         </section>
 
-        <section id="products" style="padding: 2rem 0;">
+        <section id="products">
             <div class="container">
                 <h2 class="section-title">Выберите свой пропуск</h2>
                 
@@ -185,16 +222,15 @@
                         </div>
                         <div class="product-features">
                             <ul>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Ключи</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Монеты и гемы</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Укращение профиля</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Больше квестов</li>
+                                <li><i class="fas fa-check"></i> Ключи</li>
+                                <li><i class="fas fa-check"></i> Монеты и гемы</li>
+                                <li><i class="fas fa-check"></i> Укращение профиля</li>
+                                <li><i class="fas fa-check"></i> Больше квестов</li>
                             </ul>
-                            <button class="btn" onclick="buyProduct('Brawl Pass', 699)" style="width: 100%;">Купить</button>
+                            <button class="btn" onclick="buyProduct('Brawl Pass', 699)">Купить</button>
                         </div>
                     </div>
 
-                    <!-- Brawl Pass+ -->
                     <div class="product-card highlighted">
                         <div class="product-header">
                             <div class="product-icon">
@@ -206,12 +242,12 @@
                         </div>
                         <div class="product-features">
                             <ul>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Все из Brawl Pass</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> +12 уровней сразу</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Дополнительные награды</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Больше ключей</li>
+                                <li><i class="fas fa-check"></i> Все из Brawl Pass</li>
+                                <li><i class="fas fa-check"></i> +12 уровней сразу</li>
+                                <li><i class="fas fa-check"></i> Дополнительные награды</li>
+                                <li><i class="fas fa-check"></i> Больше ключей</li>
                             </ul>
-                            <button class="btn" onclick="buyProduct('Brawl Pass+', 1499)" style="width: 100%; background: linear-gradient(45deg, var(--melodie-gold), #ffaa00); color: black;">Купить сейчас</button>
+                            <button class="btn btn-gold" onclick="buyProduct('Brawl Pass+', 1499)">Купить сейчас</button>
                         </div>
                     </div>
 
@@ -226,11 +262,11 @@
                         </div>
                         <div class="product-features">
                             <ul>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Гиперзарядный скин</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Экономия 50%</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Награды лучше чем в Brawl Pass+</li>
+                                <li><i class="fas fa-check"></i> Гиперзарядный скин</li>
+                                <li><i class="fas fa-check"></i> Экономия 50%</li>
+                                <li><i class="fas fa-check"></i> Награды лучше чем в Brawl Pass+</li>
                             </ul>
-                            <button class="btn" onclick="buyProduct('Pro Pass', 2000)" style="width: 100%;">Купить</button>
+                            <button class="btn" onclick="buyProduct('Pro Pass', 2000)">Купить</button>
                         </div>
                     </div>
                 </div>
@@ -240,151 +276,126 @@
         <section class="how-it-works">
             <div class="container">
                 <h2 class="section-title">Как это работает</h2>
-                <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem;">
+                <p class="text-center">
                     Простой и быстрый процесс покупки в 4 шага
                 </p>
                 
                 <div class="steps-container">
                     <div class="step">
                         <div class="step-number">1</div>
-                        <h3 style="color: var(--melodie-pink); margin-bottom: 0.5rem;">Выбор пропуска</h3>
+                        <h3>Выбор пропуска</h3>
                         <p>Выберите подходящий Brawl Pass и нажмите "Купить"</p>
                     </div>
                     
                     <div class="step">
                         <div class="step-number">2</div>
-                        <h3 style="color: var(--melodie-pink); margin-bottom: 0.5rem;">Оплата</h3>
+                        <h3>Оплата</h3>
                         <p>Оплатите заказ удобным способом</p>
                     </div>
                     
                     <div class="step">
                         <div class="step-number">3</div>
-                        <h3 style="color: var(--melodie-pink); margin-bottom: 0.5rem;">Активация</h3>
+                        <h3>Активация</h3>
                         <p>Отправьте данные аккаунта менеджеру</p>
                     </div>
                     
                     <div class="step">
                         <div class="step-number">4</div>
-                        <h3 style="color: var(--melodie-pink); margin-bottom: 0.5rem;">Готово</h3>
+                        <h3>Готово</h3>
                         <p>Наслаждайтесь новыми возможностями в игре</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section style="padding: 4rem 0;">
+        <section class="testimonials">
             <div class="container">
                 <h2 class="section-title">Отзывы игроков</h2>
-                <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem;">
+                <p class="text-center mb-3">
                     Что говорят наши клиенты
                 </p>
-                
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://www.shutterstock.com/image-vector/february-23-2023-vector-portrait-260nw-2265959717.jpg" alt="Александр Ч." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Александр Ч.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">67к трофеев</p>
-        </div>
-    </div>
-    <p>"Покупаю уже третий сезон подряд. Всегда быстрая доставка и отличная поддержка!"</p>
-</div>
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://i.pinimg.com/736x/82/83/83/828383eb5d5af1683fca8d9417e74324.jpg" alt="Мария С." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Мария С.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">35к трофеев</p>
-        </div>
-    </div>
-    <p>"Лучший магазин Brawl Pass! Цены адекватные, всё работает моментально."</p>
-</div>
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://i.pinimg.com/originals/c7/0a/c8/c70ac8ce5e7b3ab7306e4db14fcfaa57.jpg" alt="Иван И." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Иван Z.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">17к трофеев</p>
-        </div>
-    </div>
-    <p>"магазин топ я севетую всем кто хочет приобрести Brawl Pass сюда сразу заходите"</p>
-</div>
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://www.meme-arsenal.com/memes/9de89def653b2ab309d1ba51fdcf31c4.jpg" alt="Коля Е." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Коля Е.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">35к трофеев</p>
-        </div>
-    </div>
-    <p>"неплохой сайт, первый раз купил и возникла проблема, поддержка помогла быстрою"</p>
-</div>
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://i.pinimg.com/736x/d2/d2/b2/d2d2b2e14d80a5624ebc7e690ce00547.jpg" alt="Руслан Р." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Руслан Р.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">100к трофеев</p>
-        </div>
-    </div>
-    <p>"Пользуюсь больше года. Никогда не было проблем. Рекомендую всем!"</p>
-</div>
-                
- <div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://avatars.mds.yandex.net/i?id=45440ca07869aec45b449b0ba8170d7d_l-9867831-images-thumbs&n=13" alt="Мария С." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Прошка симпл д.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">52к трофеев</p>
-        </div>
-    </div>
-    <p>"Ваще топчик, пополнили сразу ток че та -600 гемов но думаю завтра вернут"</p>
-</div> 
+            
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">АЧ</div>
+                            <div>
+                                <h4>Александр Ч.</h4>
+                                <p>67к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"Покупаю уже третий сезон подряд. Всегда быстрая доставка и отличная поддержка!"</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">МС</div>
+                            <div>
+                                <h4>Мария С.</h4>
+                                <p>35к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"Лучший магазин Brawl Pass! Цены адекватные, всё работает моментально."</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">ИZ</div>
+                            <div>
+                                <h4>Иван Z.</h4>
+                                <p>17к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"магазин топ я севетую всем кто хочет приобрести Brawl Pass сюда сразу заходите"</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">КЕ</div>
+                            <div>
+                                <h4>Коля Е.</h4>
+                                <p>35к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"неплохой сайт, первый раз купил и возникла проблема, поддержка помогла быстрою"</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">РР</div>
+                            <div>
+                                <h4>Руслан Р.</h4>
+                                <p>100к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"Пользуюсь больше года. Никогда не было проблем. Рекомендую всем!"</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">ПС</div>
+                            <div>
+                                <h4>Прошка симпл д.</h4>
+                                <p>52к трофеев</p>
+                            </div>
+                        </div>
+                        <p>"Ваще топчик, пополнили сразу ток че та -600 гемов но думаю завтра вернут"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://avatars.mds.yandex.net/i?id=8389d2a2006f05b22c0f48a231b693f8_sr-5370538-images-thumbs&n=13" alt="Мария С." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Наташа Ш.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">2к трофеев</p>
-        </div>
-    </div>
-    <p>"Папик купил гемов, пополнили через 52 часа ну не плохо"</p>
-</div>                
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://img-webcalypt.ru/storage/memes/178367/20254/9lMTjwZokG6bj6S6F2DkW1JxgQf0MMvNasqbwryKM4I9Gp3AYRd0RyhPeiykotyvnerTAFMLx0oRktHXQl4a8K90zJaJUuCbipPtNGCf1zVmpPfzqkMMeAJDbfjTZVfY.jpeg" alt="Матвей Часики за_7лямов." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Матвей Часики за_7лямов.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">-2 трофеев</p>
-        </div>
-    </div>
-    <p>"ЫЫЫЫЫЫЫ У МЕНЯ ЕСТЬ ЧАСИКИ ЗА 7 ЛЯМОВ У МЕНЯ ЕСТЬ BMWW M5 F90 БАНАН ХУРАКАН ПОКО ЧОКО У МЕНЯ ПОСТАВКИ АЙФОНОВ 18 ПРО МАКС ГАЗЕЛЬКАМИ И ВЕЛОСИПЕДЫ АЙФОНЫ И МАШИНЫ АЙФОНЫ ЫЫЫЫЫ ВЫ БОМЖЫ Я ЧЕМПОН ПО ГЛАТАНЮ И ТАКЖЕ Я ПОЕДУ НА СВО И МЕНЯ ВОЗЬМУТ В КОЛЬЦО И БУДУ СТРЕЛЯТЬ ИЗ ПУЛЕМЁТА И Я АВТОРИТЕТ НА ЗОНЕ У МЕНЯ БЫЛО ПОГОНЯЛО ПЕТУХ"</p>
-</div>
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://ir.ozone.ru/s3/multimedia-4/6745636408.jpg" alt="СТАНОЧЕК ЧПУ." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">СТАНОЧЕК ЧПУ.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">20 трофеев</p>
-        </div>
-    </div>
-    <p>"У МЕНЯ ЕСТЬ СТАНОЧЕК Я ХОЧУ НАМАТАТСЬЯ НА СТАНОК У МЕНЯ ЕСТЬ ЗАВОД КТО СТАНОЧКИ ТЕ ОПУЩЕННЫЕ ВОДОЛАЗЫ А ПАХАН СРЕДИ ПЕТУХОВ"</p>
-</div>
-    <footer style="padding: 3rem 0; background: rgba(0, 0, 0, 0.3); margin-top: 4rem;">
+    <!-- Подвал сайта -->
+    <footer>
         <div class="container">
-            <div style="text-align: center;">
-                <h3 style="color: var(--melodie-gold); margin-bottom: 1rem;">Melodie Shop</h3>
-                <p style="margin-bottom: 2rem; color: rgba(255, 255, 255, 0.7);">
+            <div class="footer-content">
+                <h3>Melodie Shop</h3>
+                <p>
                     Официальный магазин Brawl Pass. Все права защищены.<br>
                     Brawl Stars является торговой маркой Supercell.
                 </p>
-                <div style="display: flex; justify-content: center; gap: 1rem;">
+                <div class="footer-buttons">
                     <button class="btn" onclick="openAuthModal()">Вход для персонала</button>
                     <button class="btn" onclick="openUserPanel()">Мой аккаунт</button>
                 </div>
@@ -392,427 +403,7 @@
         </div>
     </footer>
 
-    <script>
-        let users = [
-            { id: 1, name: "Администратор", email: "admin@test.com", password: "admin123", role: "admin", avatar: "A" },
-            { id: 2, name: "Менеджер", email: "manager@test.com", password: "manager123", role: "manager", avatar: "M" },
-            { id: 3, name: "Иван Иванов", email: "client@test.com", password: "client123", role: "client", avatar: "И" },
-            { id: 4, name: "Руслан Русланович", email: "gg@test.com", password: "gg123456", role: "admin", avatar: "P" }
-        ];
-
-        let orders = [
-            { id: 1, userId: 3, userName: "Иван Иванов", product: "Brawl Pass+", price: 1499, date: "15.10.2023", status: "completed" },
-            { id: 2, userId: 3, userName: "Руслан Р", product: "Brawl Pass", price: 699, date: "18.10.2023", status: "pending" },
-            { id: 3, userId: 2, userName: "Менеджер", product: "2 сезона", price: 1120, date: "20.10.2023", status: "completed" }
-        ];
-
-        let currentUser = null;
-        let currentFilter = 'all';
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUser();
-            updateUI();
-            updateDashboard();
-        });
-
-        function openAuthModal() {
-            document.getElementById('authModal').classList.add('active');
-            showLogin();
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.remove('active');
-        }
-
-        function showLogin() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('registerForm').style.display = 'none';
-        }
-
-        function showRegister() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-        }
-
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const role = document.getElementById('loginRole').value;
-            
-            const user = users.find(u => 
-                u.email === email && 
-                u.password === password && 
-                u.role === role
-            );
-            
-            if (user) {
-                currentUser = user;
-                saveUser();
-                closeAuthModal();
-                updateUI();
-                updateDashboard();
-                
-                if (user.role === 'admin' || user.role === 'manager') {
-                    showDashboard();
-                }
-                
-                showNotification('Успешный вход!', 'success');
-            } else {
-                showNotification('Неверные данные', 'error');
-            }
-        }
-
-        function register() {
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirm = document.getElementById('registerConfirm').value;
-            
-            if (!name || !email || !password) {
-                showNotification('Заполните все поля', 'error');
-                return;
-            }
-            
-            if (password !== confirm) {
-                showNotification('Пароли не совпадают', 'error');
-                return;
-            }
-            
-            if (users.some(u => u.email === email)) {
-                showNotification('Пользователь уже существует', 'error');
-                return;
-            }
-            
-            const newUser = {
-                id: users.length + 1,
-                name: name,
-                email: email,
-                password: password,
-                role: 'client',
-                avatar: name.charAt(0).toUpperCase()
-            };
-            
-            users.push(newUser);
-            currentUser = newUser;
-            saveUser();
-            closeAuthModal();
-            updateUI();
-            showNotification('Регистрация успешна!', 'success');
-        }
-
-        function logout() {
-            currentUser = null;
-            saveUser();
-            closeUserPanel();
-            updateUI();
-            showNotification('Вы вышли из системы', 'info');
-        }
-
-        function updateUI() {
-            const userName = document.getElementById('userName');
-            const userRole = document.getElementById('userRole');
-            const userAvatar = document.getElementById('userAvatar');
-            const orderBadge = document.getElementById('orderBadge');
-            
-            if (currentUser) {
-                userName.textContent = currentUser.name;
-                userRole.textContent = currentUser.role === 'admin' ? 'Администратор' : 
-                                      currentUser.role === 'manager' ? 'Менеджер' : 'Клиент';
-                userAvatar.textContent = currentUser.avatar;
-                
-                const userOrders = orders.filter(o => o.userId === currentUser.id);
-                const pendingOrders = userOrders.filter(o => o.status === 'pending').length;
-                
-                if (pendingOrders > 0) {
-                    orderBadge.textContent = pendingOrders;
-                    orderBadge.style.display = 'inline';
-                } else {
-                    orderBadge.style.display = 'none';
-                }
-                
-                updateUserOrders();
-            } else {
-                userName.textContent = 'Гость';
-                userRole.textContent = 'Не авторизован';
-                userAvatar.textContent = '?';
-                orderBadge.style.display = 'none';
-            }
-        }
-
-        function updateUserOrders() {
-            const userOrdersContainer = document.getElementById('userOrders');
-            if (!currentUser) {
-                userOrdersContainer.innerHTML = '<p>Войдите в систему, чтобы увидеть заказы</p>';
-                return;
-            }
-            
-            const userOrders = orders.filter(o => o.userId === currentUser.id);
-            
-            if (userOrders.length === 0) {
-                userOrdersContainer.innerHTML = '<p>У вас пока нет заказов</p>';
-                return;
-            }
-            
-            let html = '';
-            userOrders.forEach(order => {
-                let statusClass = '';
-                let statusText = '';
-                
-                switch(order.status) {
-                    case 'completed':
-                        statusClass = 'status-completed';
-                        statusText = 'Выполнен';
-                        break;
-                    case 'pending':
-                        statusClass = 'status-pending';
-                        statusText = 'В обработке';
-                        break;
-                    case 'cancelled':
-                        statusClass = 'status-cancelled';
-                        statusText = 'Отменен';
-                        break;
-                }
-                
-                html += `
-                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                            <strong>${order.product}</strong>
-                            <span style="background: ${order.status === 'completed' ? '#00b894' : order.status === 'pending' ? '#ff9500' : '#ff6b6b'}; 
-                                  color: white; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">
-                                ${statusText}
-                            </span>
-                        </div>
-                        <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
-                            <div>Дата: ${order.date}</div>
-                            <div>Цена: ${order.price} ₽</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            userOrdersContainer.innerHTML = html;
-        }
-
-        function buyProduct(product, price) {
-            if (!currentUser) {
-                openAuthModal();
-                showNotification('Пожалуйста, войдите в систему', 'warning');
-                return;
-            }
-            
-            const newOrder = {
-                id: orders.length + 1,
-                userId: currentUser.id,
-                userName: currentUser.name,
-                product: product,
-                price: price,
-                date: new Date().toLocaleDateString('ru-RU'),
-                status: 'pending'
-            };
-            
-            orders.push(newOrder);
-            updateUI();
-            updateDashboard();
-            
-            showNotification(`Заказ "${product}" оформлен!`, 'success');
-            
-            if (currentUser.role === 'admin' || currentUser.role === 'manager') {
-                showDashboard();
-            }
-        }
-
-        function showDashboard() {
-            document.getElementById('dashboard').classList.add('active');
-            document.getElementById('mainContent').style.display = 'none';
-            updateDashboard();
-        }
-
-        function backToShop() {
-            document.getElementById('dashboard').classList.remove('active');
-            document.getElementById('mainContent').style.display = 'block';
-        }
-
-        function updateDashboard() {
-            if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'manager')) {
-                return;
-            }
-            
-            const totalOrders = orders.length;
-            const totalRevenue = orders.reduce((sum, order) => sum + order.price, 0);
-            const pendingOrders = orders.filter(o => o.status === 'pending').length;
-            const completedOrders = orders.filter(o => o.status === 'completed').length;
-            
-            document.getElementById('totalOrders').textContent = totalOrders;
-            document.getElementById('totalRevenue').textContent = totalRevenue + ' ₽';
-            document.getElementById('pendingOrders').textContent = pendingOrders;
-            document.getElementById('completedOrders').textContent = completedOrders;
-            
-            updateOrdersList();
-        }
-
-        function updateOrdersList(filter = currentFilter, search = '') {
-            const ordersList = document.getElementById('ordersList');
-            let filteredOrders = orders;
-            
-            if (filter !== 'all') {
-                filteredOrders = orders.filter(o => o.status === filter);
-            }
-            
-            if (search) {
-                filteredOrders = filteredOrders.filter(o => 
-                    o.userName.toLowerCase().includes(search.toLowerCase()) ||
-                    o.product.toLowerCase().includes(search.toLowerCase())
-                );
-            }
-            
-            if (filteredOrders.length === 0) {
-                ordersList.innerHTML = '<div class="table-row" style="text-align: center; padding: 2rem;">Заказы не найдены</div>';
-                return;
-            }
-            
-            let html = '';
-            filteredOrders.forEach(order => {
-                let statusColor = '';
-                let statusText = '';
-                
-                switch(order.status) {
-                    case 'completed':
-                        statusColor = '#00b894';
-                        statusText = 'Выполнен';
-                        break;
-                    case 'pending':
-                        statusColor = '#ff9500';
-                        statusText = 'В обработке';
-                        break;
-                    case 'cancelled':
-                        statusColor = '#ff6b6b';
-                        statusText = 'Отменен';
-                        break;
-                }
-                
-                html += `
-                    <div class="table-row">
-                        <div>#${order.id}</div>
-                        <div>${order.userName}</div>
-                        <div>${order.product}</div>
-                        <div>${order.price} ₽</div>
-                        <div>
-                            <span style="background: ${statusColor}; color: white; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">
-                                ${statusText}
-                            </span>
-                        </div>
-                        <div>
-                            ${order.status === 'pending' ? `
-                                <button class="action-btn btn-complete" onclick="completeOrder(${order.id})">✓</button>
-                                <button class="action-btn btn-cancel" onclick="cancelOrder(${order.id})">✕</button>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            ordersList.innerHTML = html;
-        }
-
-        function filterOrders(status) {
-            currentFilter = status;
-            const search = document.getElementById('searchOrders').value;
-            updateOrdersList(status, search);
-        }
-
-        function completeOrder(orderId) {
-            const order = orders.find(o => o.id === orderId);
-            if (order) {
-                order.status = 'completed';
-                updateUI();
-                updateDashboard();
-                showNotification('Заказ выполнен', 'success');
-            }
-        }
-
-        function cancelOrder(orderId) {
-            const order = orders.find(o => o.id === orderId);
-            if (order) {
-                order.status = 'cancelled';
-                updateUI();
-                updateDashboard();
-                showNotification('Заказ отменен', 'info');
-            }
-        }
-
-        function openUserPanel() {
-            document.getElementById('userPanel').classList.add('active');
-            updateUserOrders();
-        }
-
-        function closeUserPanel() {
-            document.getElementById('userPanel').classList.remove('active');
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 1rem 1.5rem;
-                border-radius: 10px;
-                color: white;
-                font-weight: bold;
-                z-index: 3000;
-                animation: slideIn 0.3s ease;
-                background: ${type === 'success' ? '#00b894' : type === 'error' ? '#ff6b6b' : type === 'warning' ? '#ff9500' : '#4169e1'};
-            `;
-            
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        function saveUser() {
-            if (currentUser) {
-                localStorage.setItem('melodieShopUser', JSON.stringify(currentUser));
-            } else {
-                localStorage.removeItem('melodieShopUser');
-            }
-        }
-
-        function loadUser() {
-            const saved = localStorage.getItem('melodieShopUser');
-            if (saved) {
-                try {
-                    currentUser = JSON.parse(saved);
-                } catch (e) {
-                    currentUser = null;
-                }
-            }
-        }
-
-        function scrollToProducts() {
-            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('modal')) {
-                closeAuthModal();
-            }
-        });
-
-        document.getElementById('searchOrders')?.addEventListener('input', function(e) {
-            updateOrdersList(currentFilter, e.target.value);
-        });
-
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+    <script src="script.js"></script>
+    <script src="chat.js"></script>
 </body>
 </html>
