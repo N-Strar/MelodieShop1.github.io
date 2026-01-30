@@ -1,45 +1,327 @@
-<head>
-    <link rel="icon" href="https://i.pinimg.com/736x/6f/ce/1e/6fce1eda87923a7d025ded5c34ed1bbc.jpg">
-</head>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-@@ -217,17 +220,17 @@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melodie Shop | Brawl Pass</title>
+    <link rel="icon" href="https://i.pinimg.com/736x/6f/ce/1e/6fce1eda87923a7d025ded5c34ed1bbc.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+    <!-- Чат поддержки -->
+    <div class="chat-container">
+        <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-headset"></i>
+                    <span>Поддержка</span>
+                    <div class="support-status" id="supportStatus">
+                        <i class="fas fa-circle"></i>
+                        <span>Онлайн</span>
+                    </div>
+                </div>
+                <button class="chat-close" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="no-messages" id="noMessages">
+                    Напишите свой вопрос, и мы ответим вам в ближайшее время!
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Введите ваше сообщение..." onkeypress="handleChatInput(event)">
+                <button class="chat-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно авторизации -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <h3 class="text-gradient">Вход в систему</h3>
+            <div class="form-buttons">
+                <button class="btn" onclick="showLogin()">Вход</button>
+                <button class="btn" onclick="showRegister()">Регистрация</button>
+            </div>
+            
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="ваш@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Ваш пароль">
+                </div>
+                <div class="form-group">
+                    <label>Роль</label>
+                    <select id="loginRole" class="form-control">
+                        <option value="client">Клиент</option>
+                        <option value="manager">Менеджер</option>
+                        <option value="admin">Администратор</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="login()">Войти</button>
+            </div>
+            
+            <div id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label>Имя</label>
+                    <input type="text" id="registerName" class="form-control" placeholder="Ваше имя">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="ваш@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Не менее 6 символов">
+                </div>
+                <div class="form-group">
+                    <label>Подтвердите пароль</label>
+                    <input type="password" id="registerConfirm" class="form-control" placeholder="Повторите пароль">
+                </div>
+                <button class="btn" onclick="register()">Зарегистрироваться</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Панель пользователя -->
+    <div class="user-panel" id="userPanel">
+        <button class="close-panel" onclick="closeUserPanel()">&times;</button>
+        <div class="user-info">
+            <div class="user-header">
+                <div class="user-avatar" id="userAvatar">?</div>
+                <div>
+                    <h3 id="userName">Гость</h3>
+                    <p id="userRole" class="text-gold">Не авторизован</p>
+                </div>
+            </div>
+            
+            <div class="user-orders-list">
+                <h4>Мои заказы</h4>
+                <div id="userOrders">
+                    <p>Войдите в систему, чтобы увидеть заказы</p>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+
+    <!-- Панель администратора -->
+    <div class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h2>Панель управления</h2>
+                    <p id="dashboardRole">Администратор</p>
+                </div>
+                <button class="btn" onclick="backToShop()">Вернуться в магазин</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalOrders">0</div>
+                    <div>Всего заказов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalRevenue">0 ₽</div>
+                    <div>Общая выручка</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pendingOrders">0</div>
+                    <div>В обработке</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedOrders">0</div>
+                    <div>Выполнено</div>
+                </div>
+            </div>
+            
+            <h3 class="section-title">Управление заказами</h3>
+            
+            <div class="dashboard-controls">
+                <input type="text" id="searchOrders" class="form-control search-input" placeholder="Поиск заказов...">
+                <button class="btn" onclick="filterOrders('all')">Все</button>
+                <button class="btn" onclick="filterOrders('pending')">В обработке</button>
+                <button class="btn" onclick="filterOrders('completed')">Выполненные</button>
+            </div>
+            
+            <div class="orders-table">
+                <div class="table-header">
+                    <div>ID</div>
+                    <div>Пользователь</div>
+                    <div>Продукт</div>
+                    <div>Цена</div>
+                    <div>Статус</div>
+                    <div>Действия</div>
+                </div>
+                <div id="ordersList">
+                    <!-- Заказы будут здесь -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h1>Melodie Shop</h1>
+                </div>
+                
+                <div class="nav-right">
+                    <button class="btn" onclick="openAuthModal()">Войти</button>
+                    <button class="btn" onclick="openUserPanel()">
+                        <i class="fas fa-user"></i>
+                        <span id="orderBadge" class="status-badge status-pending hidden">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main id="mainContent">
+        <section class="hero">
+            <div class="container">
+                <h2>Brawl Pass</h2>
+                <p class="text-center">
+                    Получите доступ к пропуску по специальным ценам! Мгновенная доставка и гарантия качества.
+                </p>
+                <button class="btn" onclick="scrollToProducts()">Купить сейчас</button>
+            </div>
+        </section>
+
+        <section id="products">
+            <div class="container">
+                <h2 class="section-title">Выберите свой пропуск</h2>
+                
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3 class="product-title">Brawl Pass</h3>
+                            <div class="product-price">699 ₽</div>
+                            <p>Стандартный пропуск на сезон</p>
+                        </div>
+                        <div class="product-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Ключи</li>
+                                <li><i class="fas fa-check"></i> Монеты и гемы</li>
+                                <li><i class="fas fa-check"></i> Укращение профиля</li>
+                                <li><i class="fas fa-check"></i> Больше квестов</li>
+                            </ul>
+                            <button class="btn" onclick="buyProduct('Brawl Pass', 699)">Купить</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card highlighted">
+                        <div class="product-header">
+                            <div class="product-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3 class="product-title">Brawl Pass+</h3>
+                            <div class="product-price">1 499 ₽</div>
+                            <p>Премиум пропуск с бонусами</p>
+                        </div>
+                        <div class="product-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Все из Brawl Pass</li>
+                                <li><i class="fas fa-check"></i> +12 уровней сразу</li>
+                                <li><i class="fas fa-check"></i> Дополнительные награды</li>
+                                <li><i class="fas fa-check"></i> Больше ключей</li>
+                            </ul>
+                            <button class="btn btn-gold" onclick="buyProduct('Brawl Pass+', 1499)">Купить сейчас</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-header">
                             <div class="product-icon">
                                 <i class="fas fa-gem"></i>
                             </div>
-                            <h3 class="product-title">2 сезона</h3>
-                            <div class="product-price">1 120 ₽</div>
-                            <p>Специальное предложение</p>
                             <h3 class="product-title">Pro Pass</h3>
                             <div class="product-price">2000 ₽</div>
                             <p>Ультра пасс с лимитированным скином и не только</p>
                         </div>
                         <div class="product-features">
                             <ul>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> 2 Brawl Pass</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Экономия 20%</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Приоритетная поддержка</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Гиперзарядный скин</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Экономия 50%</li>
-                                <li><i class="fas fa-check" style="color: var(--melodie-gold);"></i> Награды лучше чем в Brawl Pass+</li>
+                                <li><i class="fas fa-check"></i> Гиперзарядный скин</li>
+                                <li><i class="fas fa-check"></i> Экономия 50%</li>
+                                <li><i class="fas fa-check"></i> Награды лучше чем в Brawl Pass+</li>
                             </ul>
-                            <button class="btn" onclick="buyProduct('2 сезона', 1120)" style="width: 100%;">Купить</button>
-                            <button class="btn" onclick="buyProduct('Pro Pass', 2000)" style="width: 100%;">Купить</button>
+                            <button class="btn" onclick="buyProduct('Pro Pass', 2000)">Купить</button>
                         </div>
                     </div>
                 </div>
-@@ -276,108 +279,124 @@
+            </div>
+        </section>
+
+        <section class="how-it-works">
+            <div class="container">
+                <h2 class="section-title">Как это работает</h2>
+                <p class="text-center">
+                    Простой и быстрый процесс покупки в 4 шага
+                </p>
+                
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Выбор пропуска</h3>
+                        <p>Выберите подходящий Brawl Pass и нажмите "Купить"</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Оплата</h3>
+                        <p>Оплатите заказ удобным способом</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Активация</h3>
+                        <p>Отправьте данные аккаунта менеджеру</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Готово</h3>
+                        <p>Наслаждайтесь новыми возможностями в игре</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <div class="container">
+                <h2 class="section-title">Отзывы игроков</h2>
+                <p class="text-center mb-3">
                     Что говорят наши клиенты
                 </p>
-
+            
                 <div class="testimonials-grid">
                     <div class="testimonial-card">
                         <div class="testimonial-header">
                             <div class="testimonial-avatar">АЧ</div>
                             <div>
-                                <h4 style="color: var(--melodie-gold);">Александр Ч.</h4>
-                                <p style="color: rgba(255, 255, 255, 0.7);">67к трофеев</p>
+                                <h4>Александр Ч.</h4>
+                                <p>67к трофеев</p>
                             </div>
                         </div>
                         <p>"Покупаю уже третий сезон подряд. Всегда быстрая доставка и отличная поддержка!"</p>
@@ -49,19 +331,19 @@
                         <div class="testimonial-header">
                             <div class="testimonial-avatar">МС</div>
                             <div>
-                                <h4 style="color: var(--melodie-gold);">Мария С.</h4>
-                                <p style="color: rgba(255, 255, 255, 0.7);">45к трофеев</p>
+                                <h4>Мария С.</h4>
+                                <p>35к трофеев</p>
                             </div>
                         </div>
                         <p>"Лучший магазин Brawl Pass! Цены адекватные, всё работает моментально."</p>
                     </div>
                     
-                     <div class="testimonial-card">
+                    <div class="testimonial-card">
                         <div class="testimonial-header">
-                            <div class="testimonial-avatar">ИИ</div>
+                            <div class="testimonial-avatar">ИZ</div>
                             <div>
-                                <h4 style="color: var(--melodie-gold);">Иван И.</h4>
-                                <p style="color: rgba(255, 255, 255, 0.7);">17к трофеев</p>
+                                <h4>Иван Z.</h4>
+                                <p>17к трофеев</p>
                             </div>
                         </div>
                         <p>"магазин топ я севетую всем кто хочет приобрести Brawl Pass сюда сразу заходите"</p>
@@ -69,156 +351,51 @@
                     
                     <div class="testimonial-card">
                         <div class="testimonial-header">
-                            <div class="testimonial-avatar">РР</div>
+                            <div class="testimonial-avatar">КЕ</div>
                             <div>
-                                <h4 style="color: var(--melodie-gold);">Коля Е.</h4>
-                                <p style="color: rgba(255, 255, 255, 0.7);">35к трофеев</p>
+                                <h4>Коля Е.</h4>
+                                <p>35к трофеев</p>
                             </div>
                         </div>
                         <p>"неплохой сайт, первый раз купил и возникла проблема, поддержка помогла быстрою"</p>
                     </div>
-                                        
+                    
                     <div class="testimonial-card">
                         <div class="testimonial-header">
                             <div class="testimonial-avatar">РР</div>
                             <div>
-                                <h4 style="color: var(--melodie-gold);">Руслан Р.</h4>
-                                <p style="color: rgba(255, 255, 255, 0.7);">100к трофеев</p>
+                                <h4>Руслан Р.</h4>
+                                <p>100к трофеев</p>
                             </div>
                         </div>
                         <p>"Пользуюсь больше года. Никогда не было проблем. Рекомендую всем!"</p>
                     </div>
-                     <div class="testimonial-card">
+                    
+                    <div class="testimonial-card">
                         <div class="testimonial-header">
-                            <div class="testimonial-avatar">МЧ</div>
+                            <div class="testimonial-avatar">ПС</div>
                             <div>
-                                <h4 style="color: var(--melodie-gold);">Матвей Часики за_7лямов.</h4>
-                                <p style="color: rgba(255, 255, 255, 0.7);">-2 трофеев</p>
+                                <h4>Прошка симпл д.</h4>
+                                <p>52к трофеев</p>
                             </div>
                         </div>
-                        <p>"ЫЫЫЫЫЫЫ У МЕНЯ ЕСТЬ ЧАСИКИ ЗА 7 ЛЯМОВ У МЕНЯ ЕСТЬ BMWW M5 F90 БАНАН ХУРАКАН ПОКО ЧОКО У МЕНЯ ПОСТАВКИ АЙФОНОВ 18 ПРО МАКС ГАЗЕЛЬКАМИ И ВЕЛОСИПЕДЫ АЙФОНЫ И МАШИНЫ АЙФОНЫ ЫЫЫЫЫ ВЫ БОМЖЫ Я ЧЕМПОН ПО ГЛАТАНЮ И ТАКЖЕ Я ПОЕДУ НА СВО И МЕНЯ ВОЗЬМУТ В КОЛЬЦО И БУДУ СТРЕЛЯТЬ ИЗ ПУЛЕМЁТА И Я АВТОРИТЕТ НА ЗОНЕ У МЕНЯ БЫЛО ПОГОНЯЛО ПЕТУХ"</p>
+                        <p>"Ваще топчик, пополнили сразу ток че та -600 гемов но думаю завтра вернут"</p>
                     </div>
                 </div>
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://www.shutterstock.com/image-vector/february-23-2023-vector-portrait-260nw-2265959717.jpg" alt="Александр Ч." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Александр Ч.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">67к трофеев</p>
-        </div>
-    </div>
-    <p>"Покупаю уже третий сезон подряд. Всегда быстрая доставка и отличная поддержка!"</p>
-</div>
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://i.pinimg.com/736x/82/83/83/828383eb5d5af1683fca8d9417e74324.jpg" alt="Мария С." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Мария С.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">35к трофеев</p>
-        </div>
-    </div>
-    <p>"Лучший магазин Brawl Pass! Цены адекватные, всё работает моментально."</p>
-</div>
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://i.pinimg.com/originals/c7/0a/c8/c70ac8ce5e7b3ab7306e4db14fcfaa57.jpg" alt="Иван И." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Иван Z.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">17к трофеев</p>
-        </div>
-    </div>
-    <p>"магазин топ я севетую всем кто хочет приобрести Brawl Pass сюда сразу заходите"</p>
-</div>
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://www.meme-arsenal.com/memes/9de89def653b2ab309d1ba51fdcf31c4.jpg" alt="Коля Е." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Коля Е.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">35к трофеев</p>
-        </div>
-    </div>
-    <p>"неплохой сайт, первый раз купил и возникла проблема, поддержка помогла быстрою"</p>
-</div>
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://i.pinimg.com/736x/d2/d2/b2/d2d2b2e14d80a5624ebc7e690ce00547.jpg" alt="Руслан Р." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Руслан Р.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">100к трофеев</p>
-        </div>
-    </div>
-    <p>"Пользуюсь больше года. Никогда не было проблем. Рекомендую всем!"</p>
-</div>
-
-                 <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">РР</div>
-                            <div>
-                                <h4 style="color: var(--melodie-gold);">СТАНОЧЕК ЧПУ.</h4>
-                                <p style="color: rgba(255, 255, 255, 0.7);">35 трофеев</p>
-                            </div>
-                        </div>
-                        <p>"У МЕНЯ ЕСТЬ СТАНОЧЕК Я ХОЧУ НАМАТАТСЬЯ НА СТАНОК У МЕНЯ ЕСТЬ ЗАВОД КТО СТАНОЧКИ ТЕ ОПУЩЕННЫЕ ВОДОЛАЗЫ А ПАХАН СРЕДИ ПЕТУХОВ"</p>
-                    </div>
             </div>
         </section>
     </main>
 
- <div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://avatars.mds.yandex.net/i?id=45440ca07869aec45b449b0ba8170d7d_l-9867831-images-thumbs&n=13" alt="Мария С." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Прошка симпл д.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">52к трофеев</p>
-        </div>
-    </div>
-    <p>"Ваще топчик, пополнили сразу ток че та -600 гемов но думаю завтра вернут"</p>
-</div> 
-
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://avatars.mds.yandex.net/i?id=8389d2a2006f05b22c0f48a231b693f8_sr-5370538-images-thumbs&n=13" alt="Мария С." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Наташа Ш.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">2к трофеев</p>
-        </div>
-    </div>
-    <p>"Папик купил гемов, пополнили через 52 часа ну не плохо"</p>
-</div>                
-    
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://img-webcalypt.ru/storage/memes/178367/20254/9lMTjwZokG6bj6S6F2DkW1JxgQf0MMvNasqbwryKM4I9Gp3AYRd0RyhPeiykotyvnerTAFMLx0oRktHXQl4a8K90zJaJUuCbipPtNGCf1zVmpPfzqkMMeAJDbfjTZVfY.jpeg" alt="Матвей Часики за_7лямов." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">Матвей Часики за_7лямов.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">-2 трофеев</p>
-        </div>
-    </div>
-    <p>"ЫЫЫЫЫЫЫ У МЕНЯ ЕСТЬ ЧАСИКИ ЗА 7 ЛЯМОВ У МЕНЯ ЕСТЬ BMWW M5 F90 БАНАН ХУРАКАН ПОКО ЧОКО У МЕНЯ ПОСТАВКИ АЙФОНОВ 18 ПРО МАКС ГАЗЕЛЬКАМИ И ВЕЛОСИПЕДЫ АЙФОНЫ И МАШИНЫ АЙФОНЫ ЫЫЫЫЫ ВЫ БОМЖЫ Я ЧЕМПОН ПО ГЛАТАНЮ И ТАКЖЕ Я ПОЕДУ НА СВО И МЕНЯ ВОЗЬМУТ В КОЛЬЦО И БУДУ СТРЕЛЯТЬ ИЗ ПУЛЕМЁТА И Я АВТОРИТЕТ НА ЗОНЕ У МЕНЯ БЫЛО ПОГОНЯЛО ПЕТУХ"</p>
-</div>
-<div class="testimonial-card">
-    <div class="testimonial-header">
-        <img src="https://ir.ozone.ru/s3/multimedia-4/6745636408.jpg" alt="СТАНОЧЕК ЧПУ." class="testimonial-avatar"> 
-        <div>
-            <h4 style="color: var(--melodie-gold);">СТАНОЧЕК ЧПУ.</h4>
-            <p style="color: rgba(255, 255, 255, 0.7);">20 трофеев</p>
-        </div>
-    </div>
-    <p>"У МЕНЯ ЕСТЬ СТАНОЧЕК Я ХОЧУ НАМАТАТСЬЯ НА СТАНОК У МЕНЯ ЕСТЬ ЗАВОД КТО СТАНОЧКИ ТЕ ОПУЩЕННЫЕ ВОДОЛАЗЫ А ПАХАН СРЕДИ ПЕТУХОВ"</p>
-</div>
-    <footer style="padding: 3rem 0; background: rgba(0, 0, 0, 0.3); margin-top: 4rem;">
+    <!-- Подвал сайта -->
+    <footer>
         <div class="container">
-            <div style="text-align: center;">
-                <h3 style="color: var(--melodie-gold); margin-bottom: 1rem;">Melodie Shop</h3>
-                <p style="margin-bottom: 2rem; color: rgba(255, 255, 255, 0.7);">
+            <div class="footer-content">
+                <h3>Melodie Shop</h3>
+                <p>
                     Официальный магазин Brawl Pass. Все права защищены.<br>
                     Brawl Stars является торговой маркой Supercell.
                 </p>
-                <div style="display: flex; justify-content: center; gap: 1rem;">
+                <div class="footer-buttons">
                     <button class="btn" onclick="openAuthModal()">Вход для персонала</button>
                     <button class="btn" onclick="openUserPanel()">Мой аккаунт</button>
                 </div>
@@ -226,10 +403,7 @@
         </div>
     </footer>
 
-    <script>
-        let users = [
-            { id: 1, name: "Администратор", email: "admin@test.com", password: "admin123", role: "admin", avatar: "A" },
-            { id: 2, name: "Менеджер", email: "manager@test.com", password: "manager123", role: "manager", avatar: "M" },
-            { id: 3, name: "Иван Иванов", email: "client@test.com", password: "client123", role: "client", avatar: "И" },
-            { id: 4, name: "Руслан Русланович", email: "gg@test.com", password: "gg123456", role: "admin", avatar: "P" }
-        ];
+    <script src="script.js"></script>
+    <script src="chat.js"></script>
+</body>
+</html>
